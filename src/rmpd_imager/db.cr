@@ -23,8 +23,8 @@ module RmpdImager
       def initialize
         @login = "rmpd"
         @password = "ihateyou"
-        @addr = "rmpd_database.slon-ds.ru"
-        @port = 33003
+        @addr = "rmpddatabase.slon-ds.ru"
+        @port = 443
         @ssl = true
       end
 
