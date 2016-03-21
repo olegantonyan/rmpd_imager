@@ -2,3 +2,4 @@
 /.crystal/
 /.shards/
 rmpd.db.scv
+*.elf

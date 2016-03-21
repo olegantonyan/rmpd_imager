@@ -23,12 +23,30 @@ OptionParser.new do |opt|
   opt.on("-l LOGIN",            "--login=LOGIN",                  "server login to set")                               { |v| options[:login]  = v }
   opt.on("-w DISK",             "--write-to-disk=DISK",           "disk device where to write an image")               { |v| options[:disk]  = v }
   opt.on("-u URL",              "--server-url=URL",               "server url")                                        { |v| options[:server_url]  = v }
+  opt.on("-a",                  "--list-all",                     "just show all created images")                      { |v| options[:list_all]  = "true" }
+  opt.on("-S",                  "--submit",                       "submit new device to the server")                   { |v| options[:submit]  = "true" }
 end.parse!
 
 RmpdImager.main(options)
 
 module RmpdImager
   def self.main(opts)
+    run(opts)
+    exit(0)
+  rescue e : Exception
+    STDERR.puts "#{e.class.name}: #{e}".colorize(:red)
+    e.backtrace.each do |f|
+      STDERR.puts "#{f}".colorize(:yellow)
+    end
+    exit(1)
+  end
+
+  def self.run(opts)
+    if opts.fetch(:list_all, nil)
+      list = Actions::ListAll.new
+      list.call
+      return
+    end
     write_db = false
     if opts.fetch(:new, nil)
       nw = Actions::NewImage.new
@@ -55,16 +73,7 @@ module RmpdImager
     end
 
     if write_db
-      db = Db.new("rmpd.db.scv")
-      db.add(opts[:login], opts[:server_url], opts[:server_password], opts[:rmpd_password], opts[:root_password])
+      Actions::SubmitNew.new(opts.fetch(:submit, nil)).call(opts[:login], opts[:server_url], opts[:server_password], opts[:rmpd_password], opts[:root_password])
     end
-
-    exit(0)
-  rescue e : Exception
-    STDERR.puts "#{e.class.name}: #{e}".colorize(:red)
-    e.backtrace.each do |f|
-      STDERR.puts "#{f}".colorize(:yellow)
-    end
-    exit(1)
   end
 end
