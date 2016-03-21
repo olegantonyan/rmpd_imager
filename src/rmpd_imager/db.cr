@@ -23,8 +23,9 @@ module RmpdImager
       def initialize
         @login = "rmpd"
         @password = "ihateyou"
-        @addr = "localhost"
+        @addr = "rmpd_database.slon-ds.ru"
         @port = 33003
+        @ssl = true
       end
 
       def fetch_all
@@ -46,7 +47,7 @@ module RmpdImager
       end
 
       private def client
-        client = HTTP::Client.new(@addr, @port)
+        client = HTTP::Client.new(@addr, @port, @ssl)
         client.basic_auth(@login, @password)
         client
       end
