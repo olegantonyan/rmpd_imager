@@ -30,6 +30,7 @@ module RmpdImager
 
       def fetch_all
         response = client.get("/devices.json")
+        raise Error.new("fetch error #{response.status_code}") unless response.status_code == 200
         JSON.parse(response.body)
       end
 
