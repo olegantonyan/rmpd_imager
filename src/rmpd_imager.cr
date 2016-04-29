@@ -47,7 +47,6 @@ module RmpdImager
       list.call
       return
     end
-    write_db = false
     if opts.fetch(:new, nil)
       nw = Actions::NewImage.new
       opts[:login] =            opts.fetch(:login, nil)           || nw.login
@@ -55,7 +54,6 @@ module RmpdImager
       opts[:rmpd_password] =    opts.fetch(:rmpd_password, nil)   || nw.rmpd_password
       opts[:root_password] =    opts.fetch(:root_password, nil)   || nw.root_password
       opts[:server_url] =       opts.fetch(:server_url, nil)      || nw.server_url
-      write_db = true
     end
 
     pre = Actions::PrepareImage.new(opts.fetch(:vanilla, nil),
@@ -72,8 +70,6 @@ module RmpdImager
       wr.call
     end
 
-    if write_db
-      Actions::SubmitNew.new(opts.fetch(:submit, nil)).call(opts[:login], opts[:server_url], opts[:server_password], opts[:rmpd_password], opts[:root_password])
-    end
+    Actions::SubmitNew.new(opts.fetch(:submit, nil)).call(opts[:login], opts[:server_url], opts[:server_password], opts[:rmpd_password], opts[:root_password])
   end
 end
