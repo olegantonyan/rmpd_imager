@@ -25,6 +25,7 @@ OptionParser.new do |opt|
   opt.on("-u URL",              "--server-url=URL",               "server url")                                        { |v| options[:server_url]  = v }
   opt.on("-a",                  "--list-all",                     "just show all created images")                      { |v| options[:list_all]  = "true" }
   opt.on("-S",                  "--submit",                       "submit new device to the server")                   { |v| options[:submit]  = "true" }
+  opt.on("-t",                  "--three-partiotion",             "image with rootfs and another separate partition")  { |v| options[:three]  = "true" }
 end.parse!
 
 RmpdImager.main(options)
@@ -66,7 +67,11 @@ module RmpdImager
     pre.call
 
     if opts.fetch(:disk, nil)
-      wr = Actions::WriteImage.new(pre.new_image_path, opts[:disk])
+      wr = if opts.fetch(:three)
+             Actions::WriteImage.new(pre.new_image_path, opts[:disk], [2, 3], 3)
+           else
+             Actions::WriteImage.new(pre.new_image_path, opts[:disk])
+           end
       wr.call
     end
 

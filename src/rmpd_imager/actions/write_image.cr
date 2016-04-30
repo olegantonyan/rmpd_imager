@@ -3,10 +3,10 @@ module RmpdImager
     class WriteImage
       class Error < Exception; end
 
-      property :image_path, :disk_path
+      property :image_path, :disk_path, :check_partitions_numbers, :expand_partition_number
       getter :disk
 
-      def initialize(@image_path, @disk_path)
+      def initialize(@image_path, @disk_path, @check_partitions_numbers = [2], @expand_partition_number = 2)
         raise Error.new("no disk path given") if disk_path.nil? || disk_path.not_nil!.empty?
         raise Error.new("no image path given") if image_path.nil? || image_path.not_nil!.empty?
         dsk = Disks.new.find { |d| d.path == disk_path }
@@ -20,11 +20,13 @@ module RmpdImager
         end
 
         logger.within("expand partition") do
-          logger.write(disk.expand_partition(2))
+          logger.write(disk.expand_partition(expand_partition_number))
         end
 
         logger.within("check filesystem") do
-          logger.write(disk.checkfs(2))
+          check_partitions_numbers.each do |i|
+            logger.write(disk.checkfs(i))
+          end
         end
       end
 
