@@ -2,6 +2,8 @@ module RmpdImager
   class Disks
     include Enumerable(Disk)
 
+    @raw_disks : Array(String)
+
     def initialize
       DependencyCheck.call("lsblk", "--version", "may be found in 'util-linux package'")
       raw_output = `lsblk  --nodeps --noheadings --paths --list --output NAME,SIZE,RM,MODEL`
@@ -22,7 +24,10 @@ module RmpdImager
   class Disk
     class Error < Exception; end
 
-    property :path, :size, :removable, :model
+    property path : String
+    property size : String
+    property removable : Bool
+    property model : String
 
     def initialize(raw_disk)
       DependencyCheck.only_root!

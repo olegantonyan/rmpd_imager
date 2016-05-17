@@ -1,7 +1,13 @@
 module RmpdImager
   module Actions
     class PrepareImage
-      property :vanilla, :distribution, :login, :server_password, :rmpd_password, :root_password, :server_url
+      property vanilla : String | Nil
+      property distribution : String | Nil
+      property login : String | Nil
+      property server_password : String | Nil
+      property rmpd_password : String | Nil
+      property root_password : String | Nil
+      property server_url : String | Nil
       getter :new_image_path, :image_mountpoint
 
       def initialize(@vanilla, @distribution, @server_url, @login, @server_password, @rmpd_password, @root_password = nil)

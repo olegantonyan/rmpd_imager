@@ -2,7 +2,8 @@ require "inifile"
 
 module RmpdImager
   class ConfigFile
-    property :path, :data
+    property path : String | Nil
+    property data : Hash(String, Hash(String, String))
 
     def initialize(@path)
       @data = IniFile.load(File.read(path)) || {} of String => Hash(String, String)
@@ -21,7 +22,7 @@ module RmpdImager
         end
         content += "\n"
       end
-      File.write(path, content)
+      File.write(path.not_nil!, content)
     end
   end
 end

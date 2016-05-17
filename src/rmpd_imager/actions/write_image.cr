@@ -3,8 +3,11 @@ module RmpdImager
     class WriteImage
       class Error < Exception; end
 
-      property :image_path, :disk_path, :check_partitions_numbers, :expand_partition_number
-      getter :disk
+      property image_path  : String | Nil
+      property disk_path : String | Nil
+      property check_partitions_numbers : Array(Int32)
+      property expand_partition_number : Int32
+      getter disk : ::RmpdImager::Disk
 
       def initialize(@image_path, @disk_path, @check_partitions_numbers = [2], @expand_partition_number = 2)
         raise Error.new("no disk path given") if disk_path.nil? || disk_path.not_nil!.empty?

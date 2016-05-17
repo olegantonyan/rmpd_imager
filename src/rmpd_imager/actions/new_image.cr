@@ -3,7 +3,7 @@ require "secure_random"
 module RmpdImager
   module Actions
     class NewImage
-      getter :login, :rmpd_password, :root_password, :server_password, :server_url
+      getter login : String, rmpd_password : String, root_password : String, server_password : String, server_url : String
 
       def initialize
         @login = SecureRandom.hex[0..6]

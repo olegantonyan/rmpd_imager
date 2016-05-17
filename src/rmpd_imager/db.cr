@@ -4,7 +4,7 @@ require "json"
 
 module RmpdImager
   class Db
-    property :file_path
+    property file_path : String
 
     def initialize(@file_path)
     end

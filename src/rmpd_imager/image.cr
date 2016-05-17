@@ -2,7 +2,8 @@ module RmpdImager
   class Image
     class Error < Exception; end
 
-    property :path, :mount_point
+    property path : String | Nil
+    property mount_point : String | Nil
 
     def initialize(@path)
       DependencyCheck.only_root!

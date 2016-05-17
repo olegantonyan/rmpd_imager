@@ -2,7 +2,7 @@ module RmpdImager
   class Password
     class Error < Exception; end
 
-    property :root_path
+    property root_path : String | Nil
 
     def initialize(@root_path)
       DependencyCheck.call("openssl", "version")
@@ -23,7 +23,7 @@ module RmpdImager
     end
 
     def shadow_file_path
-      root_path + "/etc/shadow"
+      root_path.not_nil! + "/etc/shadow"
     end
 
     private def hashed(passwd)

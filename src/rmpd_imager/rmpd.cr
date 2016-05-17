@@ -2,7 +2,8 @@ module RmpdImager
   class Rmpd
     class Error < Exception; end
 
-    property :root_path, :distribution_path
+    property root_path : String | Nil
+    property distribution_path : String | Nil
 
     def initialize(@root_path, @distribution_path)
       raise Error.new("cannot operate on / or empty path") if root_path.nil? || root_path.not_nil!.empty? || root_path == "/"
@@ -10,7 +11,6 @@ module RmpdImager
       DependencyCheck.call("tar", "--version")
       DependencyCheck.call("cp", "--version")
       DependencyCheck.call("find", "--version")
-
     end
 
     def config_file
@@ -18,19 +18,19 @@ module RmpdImager
     end
 
     def rmpd_client_path
-      rmpd_home_path + "/rmpd_client"
+      rmpd_home_path.not_nil! + "/rmpd_client"
     end
 
     def rmpd_home_path
-      root_path + "/home/rmpd"
+      root_path.not_nil! + "/home/rmpd"
     end
 
     def config_file_path
-      rmpd_client_path + "/rmpd.conf"
+      rmpd_client_path.not_nil! + "/rmpd.conf"
     end
 
     def example_config_file_path
-      rmpd_client_path + "/rmpd.conf.example"
+      rmpd_client_path.not_nil! + "/rmpd.conf.example"
     end
 
     def install

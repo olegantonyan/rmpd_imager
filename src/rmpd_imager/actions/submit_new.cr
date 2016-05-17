@@ -1,7 +1,7 @@
 module RmpdImager
   module Actions
     class SubmitNew
-      property :submit
+      property submit : Bool | String | Nil
       getter :local_file
 
       def initialize(@submit)
