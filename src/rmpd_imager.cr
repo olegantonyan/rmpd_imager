@@ -67,7 +67,7 @@ module RmpdImager
     pre.call
 
     if opts.fetch(:disk, nil)
-      wr = if opts.fetch(:three)
+      wr = if opts.fetch(:three, nil)
              Actions::WriteImage.new(pre.new_image_path, opts[:disk], [2, 3], 3)
            else
              Actions::WriteImage.new(pre.new_image_path, opts[:disk])
