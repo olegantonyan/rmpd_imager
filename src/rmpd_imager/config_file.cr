@@ -1,4 +1,4 @@
-require "inifile"
+require "ini"
 
 module RmpdImager
   class ConfigFile
@@ -6,7 +6,7 @@ module RmpdImager
     property data : Hash(String, Hash(String, String))
 
     def initialize(@path)
-      @data = IniFile.load(File.read(path)) || {} of String => Hash(String, String)
+      @data = INI.parse(File.read(path)) || {} of String => Hash(String, String)
     end
 
     def [](key)
