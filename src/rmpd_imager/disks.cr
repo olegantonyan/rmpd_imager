@@ -1,26 +1,4 @@
 module RmpdImager
-  class Disks
-    include Enumerable(Disk)
-
-    @raw_disks : Array(String)
-
-    def initialize
-      DependencyCheck.call("lsblk", "--version", "may be found in 'util-linux package'")
-      raw_output = `lsblk  --nodeps --noheadings --paths --list --output NAME,SIZE,RM,MODEL`
-      @raw_disks = raw_output.split("\n").select { |i| i.size > 0 }
-    end
-
-    def each
-      @raw_disks.each do |i|
-        yield Disk.new(i)
-      end
-    end
-
-    def removable
-      select { |i| i.removable }
-    end
-  end
-
   class Disk
     class Error < Exception; end
 
@@ -72,6 +50,28 @@ module RmpdImager
 
     private def check_removable!
       raise Error.new("cannot operate on non-removable disk #{path}") unless removable
+    end
+  end
+  
+  class Disks
+    include Enumerable(Disk)
+
+    @raw_disks : Array(String)
+
+    def initialize
+      DependencyCheck.call("lsblk", "--version", "may be found in 'util-linux package'")
+      raw_output = `lsblk  --nodeps --noheadings --paths --list --output NAME,SIZE,RM,MODEL`
+      @raw_disks = raw_output.split("\n").select { |i| i.size > 0 }
+    end
+
+    def each
+      @raw_disks.each do |i|
+        yield Disk.new(i)
+      end
+    end
+
+    def removable
+      self.select { |i| i.removable }
     end
   end
 end
