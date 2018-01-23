@@ -1,4 +1,4 @@
-require "secure_random"
+require "random/secure"
 
 module RmpdImager
   module Actions
@@ -6,10 +6,10 @@ module RmpdImager
       getter login : String, rmpd_password : String, root_password : String, server_password : String, server_url : String
 
       def initialize
-        @login = SecureRandom.hex[0..6]
-        @rmpd_password = SecureRandom.hex[1..8]
-        @root_password = SecureRandom.hex[2..9]
-        @server_password = SecureRandom.hex[3..15]
+        @login = Random::Secure.hex[0..6]
+        @rmpd_password = Random::Secure.hex[1..8]
+        @root_password = Random::Secure.hex[2..9]
+        @server_password = Random::Secure.hex[3..15]
         @server_url = "https://server.slon-ds.ru"
       end
 
