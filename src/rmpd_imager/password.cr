@@ -14,10 +14,11 @@ module RmpdImager
       raise Error.new("no new password given") if new_password.nil? || new_password.not_nil!.empty?
       shadow_file = File.read(shadow_file_path).split("\n").reject { |i| i.empty? }
       line = shadow_file.find { |i| username == i.split(':').first }
-      raise Error.new("user #{username} not fount in shadow file") unless line
+      raise Error.new("user #{username} not found in shadow file") unless line
       new_shadow_file = shadow_file.reject { |i| i == line }
       line_array = line.split(':')
       line_array[1] = hashed(new_password)
+      raise Error.new("something went wrong when hashing a password") if line_array[1].nil? || line_array[1] == "(null)"
       new_shadow_file << line_array.join(':')
       File.write(shadow_file_path, new_shadow_file.join('\n'))
     end
@@ -28,7 +29,7 @@ module RmpdImager
 
     private def hashed(passwd)
       salt = ""
-      1.upto(16) do
+      1.upto(5) do
         salt += ('a'..'z').to_a.sample
       end
       `openssl passwd -1 -salt #{salt} #{passwd}`.delete("\n")
