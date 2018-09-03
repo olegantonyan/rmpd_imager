@@ -36,7 +36,7 @@ module RmpdImager
     end
 
     private def mount_to(point, partition_number)
-      Dir.mkdir_p(point, "666")
+      Dir.mkdir_p(point, 666)
       system "mount -o loop,offset=#{start_sector(partition_number) * 512} #{path} #{point}"
     end
 
